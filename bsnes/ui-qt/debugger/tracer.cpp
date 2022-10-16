@@ -56,7 +56,7 @@ void Tracer::outputCpuTrace() {
 void Tracer::outputSmpTrace() {
     char buf[256]; int len;
     if (traceOutputFormatIsText) {
-        SNES::smp.disassemble_opcode(buf, SNES::cpu.regs.pc);
+        SNES::smp.disassemble_opcode(buf, SNES::smp.regs.pc);
         len = strlen(buf) + 1; // byte size = string + null term
     } else {
         // TODO: implement // SNES::smp.disassemble_opcode_bin(buf, SNES::cpu.regs.pc, len); // binary
@@ -68,7 +68,7 @@ void Tracer::outputSmpTrace() {
 void Tracer::outputSa1Trace() {
     char buf[256]; int len;
     if (traceOutputFormatIsText) {
-        SNES::sa1.disassemble_opcode(buf, SNES::cpu.regs.pc, config().debugger.showHClocks);
+        SNES::sa1.disassemble_opcode(buf, SNES::sa1.regs.pc, config().debugger.showHClocks);
         len = strlen(buf) + 1; // byte size = string + null term
     } else {
         // TODO: implement // SNES::sa1.disassemble_opcode_bin(buf, SNES::cpu.regs.pc, config().debugger.showHClocks, len); // binary
@@ -80,7 +80,7 @@ void Tracer::outputSa1Trace() {
 void Tracer::outputSfxTrace() {
     char buf[256]; int len;
     if (traceOutputFormatIsText) {
-        SNES::superfx.disassemble_opcode(buf, SNES::cpu.regs.pc);
+        SNES::superfx.disassemble_opcode(buf, SNES::superfx.opcode_pc);
         len = strlen(buf) + 1; // byte size = string + null term
     } else {
         // TODO: implement // SNES::superfx.disassemble_opcode_bin(buf, SNES::cpu.regs.pc, len); // binary
@@ -92,7 +92,7 @@ void Tracer::outputSfxTrace() {
 void Tracer::outputSgbTrace() {
     char buf[256]; int len;
     if (traceOutputFormatIsText) {
-        SNES::supergameboy.disassemble_opcode(buf, SNES::cpu.regs.pc);
+        SNES::supergameboy.disassemble_opcode(buf, SNES::supergameboy.opcode_pc);
         len = strlen(buf) + 1; // byte size = string + null term
     } else {
         // TODO: implement // SNES::supergameboy.disassemble_opcode_bin(buf, SNES::cpu.regs.pc, len); // binary
