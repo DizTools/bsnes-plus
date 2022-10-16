@@ -78,8 +78,7 @@ AdvancedSettingsWindow::AdvancedSettingsWindow() {
   portGroup->addButton(portNone);
   portLayout->addWidget(portNone);
 
-  portSpacer = new QWidget;
-  portLayout->addWidget(portSpacer);
+  portLayout->addWidget(new QWidget); // spacer
 
   vramTitle = new QLabel("VRAM size:");
   layout->addWidget(vramTitle);
@@ -128,6 +127,28 @@ AdvancedSettingsWindow::AdvancedSettingsWindow() {
   focusButtonGroup->addButton(focusAllow);
   focusLayout->addWidget(focusAllow);
 
+  saveSPCTitle = new QLabel("Save SPC file:");
+  layout->addWidget(saveSPCTitle);
+
+  saveSPCLayout = new QHBoxLayout;
+  saveSPCLayout->setSpacing(Style::WidgetSpacing);
+  layout->addLayout(saveSPCLayout);
+  layout->addSpacing(Style::WidgetSpacing);
+
+  saveSPCButtonGroup = new QButtonGroup(this);
+
+  saveSPCOnNextNote = new QRadioButton("At start of next note");
+  saveSPCOnNextNote->setToolTip("Typical use-case");
+  saveSPCButtonGroup->addButton(saveSPCOnNextNote);
+  saveSPCLayout->addWidget(saveSPCOnNextNote);
+
+  saveSPCImmediately = new QRadioButton("Immediately");
+  saveSPCImmediately->setToolTip("Useful for debugging");
+  saveSPCButtonGroup->addButton(saveSPCImmediately);
+  saveSPCLayout->addWidget(saveSPCImmediately);
+  
+  saveSPCLayout->addWidget(new QWidget); // spacer
+  
   miscTitle = new QLabel("Miscellaneous:");
   layout->addWidget(miscTitle);
 
@@ -160,6 +181,8 @@ AdvancedSettingsWindow::AdvancedSettingsWindow() {
   connect(rewindEnable, SIGNAL(stateChanged(int)), this, SLOT(toggleRewindEnable()));
   connect(allowInvalidInput, SIGNAL(stateChanged(int)), this, SLOT(toggleAllowInvalidInput()));
   connect(useCommonDialogs, SIGNAL(stateChanged(int)), this, SLOT(toggleUseCommonDialogs()));
+  connect(saveSPCOnNextNote, SIGNAL(pressed()), this, SLOT(setSaveSPCOnNextNote()));
+  connect(saveSPCImmediately, SIGNAL(pressed()), this, SLOT(setSaveSPCImmediately()));
 }
 
 void AdvancedSettingsWindow::initializeUi() {
@@ -210,6 +233,9 @@ void AdvancedSettingsWindow::initializeUi() {
   rewindEnable->setChecked(config().system.rewindEnabled);
   allowInvalidInput->setChecked(config().input.allowInvalidInput);
   useCommonDialogs->setChecked(config().diskBrowser.useCommonDialogs);
+  
+  saveSPCOnNextNote->setChecked (SNES::config().spc_save_policy == SNES::SMP::SPCSavePolicy::OnNextNote);
+  saveSPCImmediately->setChecked(SNES::config().spc_save_policy == SNES::SMP::SPCSavePolicy::Immediately);
 }
 
 void AdvancedSettingsWindow::videoDriverChange(int index) {
@@ -255,3 +281,6 @@ void AdvancedSettingsWindow::toggleAllowInvalidInput() {
 void AdvancedSettingsWindow::toggleUseCommonDialogs() {
   config().diskBrowser.useCommonDialogs = useCommonDialogs->isChecked();
 }
+
+void AdvancedSettingsWindow::setSaveSPCOnNextNote()  { SNES::config().spc_save_policy = SNES::SMP::SPCSavePolicy::OnNextNote; }
+void AdvancedSettingsWindow::setSaveSPCImmediately() { SNES::config().spc_save_policy = SNES::SMP::SPCSavePolicy::Immediately; }
