@@ -1,16 +1,16 @@
 #include "breakpoint.moc"
 BreakpointEditor *breakpointEditor;
 
-SymbolItemModel::SymbolItemModel(SymbolMap *symbols, QObject *parent)
+SymbolItemModel::SymbolItemModel(SymbolMap *map, QObject *parent)
   : QStandardItemModel(parent) {
 
-  for (int i = 0; i < symbols->symbols.size(); i++) {
-    Symbol symbol = symbols->symbols[i].getSymbol();
+  foreach(symbols, map->symbols) {
+    Symbol symbol = symbols.getSymbol();
     if (!symbol.isSymbol()) continue;
     
     QStandardItem *item = new QStandardItem();
-    item->setText(QString::asprintf("%06x %s", symbol.address, symbol.name()));
-    item->setData(symbol.address);
+    item->setText(QString::asprintf("%06x %s", symbols.address, symbol.name()));
+    item->setData(symbols.address);
     appendRow(item);
   }
 }
@@ -446,7 +446,8 @@ void BreakpointEditor::addBreakpoint(const string& addr, const string& mode, con
     // Try to find a comparison operator.
     // Search in reverse through the available ones so that two-character operators (!=, <=, >=) get found first
     for (int i = BreakpointModel::compares.count() - 1; i >= 0; i--) {
-      const char *oper = BreakpointModel::compares[i].toUtf8().constData();
+      auto data = BreakpointModel::compares[i].toUtf8();
+      const char *oper = data.constData();
       if (addr.position(oper)) {
         addresses.split<2>(oper, addr);
         model->setData(model->index(row, BreakpointModel::BreakCompare), i);
