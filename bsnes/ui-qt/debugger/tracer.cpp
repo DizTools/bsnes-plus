@@ -3,18 +3,6 @@ Tracer *tracer;
 
 #include "w32_socket.cpp"
 
-// TODO: demo only: make these checkboxes in the UI or config options
-
-// tracer output info format
-// false: binary format (small/faster),
-// true:  text format (easier to parse / but slower and HUGE))
-const bool traceOutputFormatIsText = false;
-
-// where trace output will be sent
-// true: listen on a socket port and stream data to a client
-// false: output via a logfile on disk
-const bool traceOutputMediumIsSocket = true;
-
 #define DEFAULT_TRACE_SERVER_LISTEN_PORT "27015"
 
 void Tracer::outputTrace(const char* buf, int len) {
@@ -230,6 +218,16 @@ void Tracer::setTraceMaskState(bool state) {
   }
 }
 
+// Trace format  & medium
+
+void Tracer::setTraceFormat(int state) {
+  traceOutputFormatIsText = (state == Qt::Checked);
+}
+
+void Tracer::setTraceMedium(int state) {
+  traceOutputMediumIsSocket = (state == Qt::Checked);
+}
+
 Tracer::Tracer() {
   traceCpu = false;
   traceSmp = false;
@@ -237,6 +235,16 @@ Tracer::Tracer() {
   traceSfx = false;
   traceSgb = false;
   traceMask = false;
+
+  // tracer output info format
+  // false: binary format (small/faster),
+  // true:  text format (easier to parse / but slower and HUGE))
+  traceOutputFormatIsText = false;
+
+  // where trace output will be sent
+  // true: listen on a socket port and stream data to a client
+  // false: output via a logfile on disk
+  traceOutputMediumIsSocket = true;
 
   traceMaskCPU = new uint8_t[(1 << 24) >> 3]();
   traceMaskSMP = new uint8_t[(1 << 16) >> 3]();

@@ -25,6 +25,9 @@ public slots:
 
   void flushTraceOutput();
 
+  void setTraceFormat(int);
+  void setTraceMedium(int);
+
 private:
   void setTraceState(bool);
 
@@ -37,6 +40,9 @@ private:
   bool traceSfx;
   bool traceSgb;
   bool traceMask;
+
+  bool traceOutputFormatIsText;
+  bool traceOutputMediumIsSocket;
 
   uint8_t *traceMaskCPU;
   uint8_t *traceMaskSMP;

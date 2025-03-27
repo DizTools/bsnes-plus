@@ -9,6 +9,8 @@ public:
   QVBoxLayout *controlLayout;
   QCheckBox *stepProcessor;
   QCheckBox *traceProcessor;
+  QCheckBox *traceFormat;
+  QCheckBox *traceMedium; 
   QPushButton *symbolsViewer;
   class QHexEdit *ramViewer;
   class SymbolsView *symbolsViewerDialog;
@@ -26,6 +28,8 @@ public slots:
 signals:
   void synchronized();
   void traceStateChanged(int);
+  void traceFormatChanged(int);
+  void traceMediumChanged(int);
 
 protected:
   void resizeEvent(QResizeEvent*);
