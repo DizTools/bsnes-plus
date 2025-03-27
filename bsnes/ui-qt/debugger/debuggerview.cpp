@@ -56,6 +56,18 @@ DebuggerView::DebuggerView(RegisterEdit *registers, DisasmProcessor *processor, 
   traceProcessor = new QCheckBox("Trace");
   controlLayout->addWidget(traceProcessor);
 
+  traceFormat = new QCheckBox("Text Output");
+  controlLayout->addWidget(traceFormat);
+
+  traceMedium = new QCheckBox("Socket Output");
+  controlLayout->addWidget(traceMedium);
+
+  // Text output
+  traceFormat->setChecked(false); 
+
+  // Socket output
+  traceMedium->setChecked(true); 
+
   if (processor->getSymbols() != NULL) {
     symbolsViewerDialog = new SymbolsView(processor);
     symbolsViewer = new QPushButton("Symbols");
@@ -67,6 +79,8 @@ DebuggerView::DebuggerView(RegisterEdit *registers, DisasmProcessor *processor, 
 
   connect(stepProcessor, SIGNAL(clicked(bool)), this, SLOT(synchronize()));
   connect(traceProcessor, SIGNAL(stateChanged(int)), this, SIGNAL(traceStateChanged(int)));
+  connect(traceFormat, SIGNAL(stateChanged(int)), this, SIGNAL(traceFormatChanged(int)));
+  connect(traceMedium, SIGNAL(stateChanged(int)), this, SIGNAL(traceMediumChanged(int)));
 
   connect(consoleLayout, SIGNAL(splitterMoved(int,int)), this, SLOT(synchronize()));
 

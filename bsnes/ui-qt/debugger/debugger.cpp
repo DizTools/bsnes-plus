@@ -259,6 +259,18 @@ Debugger::Debugger() {
   connect(debugSGB, SIGNAL(traceStateChanged(int)), tracer, SLOT(setSgbTraceState(int)));
   connect(traceMask->defaultAction(), SIGNAL(toggled(bool)), tracer, SLOT(setTraceMaskState(bool)));
 
+  connect(debugCPU, SIGNAL(traceFormatChanged(int)), tracer, SLOT(setTraceFormat(int)));
+  connect(debugSMP, SIGNAL(traceFormatChanged(int)), tracer, SLOT(setTraceFormat(int)));
+  connect(debugSA1, SIGNAL(traceFormatChanged(int)), tracer, SLOT(setTraceFormat(int)));
+  connect(debugSFX, SIGNAL(traceFormatChanged(int)), tracer, SLOT(setTraceFormat(int)));
+  connect(debugSGB, SIGNAL(traceFormatChanged(int)), tracer, SLOT(setTraceFormat(int)));
+
+  connect(debugCPU, SIGNAL(traceMediumChanged(int)), tracer, SLOT(setTraceMedium(int)));
+  connect(debugSMP, SIGNAL(traceMediumChanged(int)), tracer, SLOT(setTraceMedium(int)));
+  connect(debugSA1, SIGNAL(traceMediumChanged(int)), tracer, SLOT(setTraceMedium(int)));
+  connect(debugSFX, SIGNAL(traceMediumChanged(int)), tracer, SLOT(setTraceMedium(int)));
+  connect(debugSGB, SIGNAL(traceMediumChanged(int)), tracer, SLOT(setTraceMedium(int)));
+
   frameCounter = 0;
   synchronize();
   resize(855, 745);
